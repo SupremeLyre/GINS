@@ -240,7 +240,7 @@ extern void readsnx(const char *snxfile, const char *infile, const char *outfile
 			stas.nmax = str2num(buff, 60, 65);
 			if (!(stas.data = (sta_t*)malloc(sizeof(sta_t)*stas.nmax))) {
 				stas.nmax = stas.n = 0;
-				return 0;
+				return;
 			}
 		}
 		else if (!strncmp(buff, "+SOLUTION/ESTIMATE", 18)) {
@@ -317,14 +317,14 @@ extern int readproduct(const prcopt_t *prcopt, const filopt_t *fopt, nav_t *nav,
 		uniqnav(nav);
 	}
 
-	/* read procise clk */
+	/* read precise clk */
 	if (*fopt->clk && (ext = strrchr(fopt->clk, '.')) && (!strcmp(ext, ".clk") || !strcmp(ext, ".CLK"))) {
 		free(nav->pclk); nav->pclk = NULL; nav->nc = nav->ncmax = 0;
 		reppath(fopt->clk, path, ts, "", "");
 		readrnxc(path, nav);
 	}
 
-	/* read procise orb */
+	/* read precise orb */
 	if (*fopt->sp3 && (ext = strrchr(fopt->sp3, '.')) && (!strcmp(ext, ".sp3") || !strcmp(ext, ".SP3"))) {
 		free(nav->peph); nav->peph = NULL; nav->ne = nav->nemax = 0;
 		reppath(fopt->sp3, path, ts, "", "");

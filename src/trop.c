@@ -492,7 +492,7 @@ extern void nmf(gtime_t time, const double pos[], const double azel[],
 
 	if (el <= 0.0) {
 		if (mapfw) *mapfw = 0.0;
-		return 0.0;
+		return;
 	}
 	/* year from doy 28, added half a year for southern latitudes */
 	y = (time2doy(time) - 28.0) / 365.25 + (lat<0.0 ? 0.5 : 0.0);

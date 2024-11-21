@@ -49,7 +49,7 @@ void decodeQual(char *infile)
         strncpy(outfile, infile, p-infile);
         strcpy(outfile+(p-infile),".mp");
     }
-	else return 0;
+	else return;
 
 	if (!(fp_in = fopen(infile, "r")) || !(fp_out = fopen(outfile, "w"))) {
 		trace(2, "file open error: file=%s\n", infile);
@@ -80,7 +80,7 @@ void decodeQual(char *infile)
 					if (sflag_1[i] && !sflag[i]) {						
 						if (arcd[i].len > 1) {
 							arcd[i].te = t_2;
-							if ((stat = addarc(&arcs, &arcd[i])) < 0) return 0;
+							if ((stat = addarc(&arcs, &arcd[i])) < 0) return ;
 						}
 						arcd[i].len = 0;		
 					}
@@ -94,7 +94,7 @@ void decodeQual(char *infile)
 			if (ini&0x3) {												
 				if (arcd[sat].len > 1) {
 					arcd[sat].te = t_2;
-					if ((stat = addarc(&arcs, &arcd[sat])) < 0) return 0;
+					if ((stat = addarc(&arcs, &arcd[sat])) < 0) return ;
 				}
 				arcd[sat].len = 0;	
 			}
@@ -232,7 +232,7 @@ void decodeRes(char *infile)
         strncpy(outfile, infile, p-infile);
         strcpy(outfile+(p-infile),".res");
     }
-	else return 0;
+	else return ;
 
 	if (!(fp_in = fopen(infile, "r")) || !(fp_out = fopen(outfile, "w"))) {
 		trace(2, "file open error: file=%s\n", infile);
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
 	// getsysopts(&prcopt, &solopt, &filopt);
     // sprintf(infile, "%s*.ppp", filopt.outdir);
 
-	sprintf(infile, "/media/zhuhang/D/Data/PPPRTK_INS-Wuh-220519/Result/Sept/*f2-urban-pp.ppp");
+	sprintf(infile, "/home/supremelyre/cmakeprojects/GINS/results/2023013/2023-23-01-13-f2.ppp");
 	// sprintf(infile, "/media/zhuhang/D/Data/PPPRTK_INS-Wuh-220519/Result/Sept/*05-24.ppp");
 	// sprintf(infile, "/media/zhuhang/D/Data/PPPRTK_INS-Wuh-220519/Result/*-19.ppp");
 	// sprintf(infile, "/media/zhuhang/D/Data/PPPRTK_INS_VISUAL_Wuh-230416/Result/PP7/*.ppp");

@@ -161,7 +161,7 @@ static int rescode(int iter, const obsd_t *obs, int n,
 		sat = obs[i].sat;
 		
 		if (!(sys = satsys(sat, &prn))) continue;												
-		if (sys&SYS_CMP && ((prn < 19) || (prn > 46))) continue;	
+		// if (sys&SYS_CMP && ((prn < 19) || (prn > 46))) continue;	
 
 		/* reject duplicated observation data */
 		if (i<n - 1 && i<MAXOBS - 1 && sat == obs[i + 1].sat) {
@@ -384,7 +384,8 @@ static int resdop(const obsd_t *obs, int n, const double *rs, const double *dts,
 		sig = (err <= 0.0) ? 1.0 : err*CLIGHT / freq;		
 
 		/* range rate residual (m/s) */
-		v[nv] = (-obs[i].D[0] * CLIGHT / freq - (rate + x[3] - CLIGHT*dts[1 + i * 2])) / sig;
+        // um980 doppler*-1
+		v[nv] = (obs[i].D[0] * CLIGHT / freq - (rate + x[3] - CLIGHT*dts[1 + i * 2])) / sig;
 
 		/* design matrix */
 		for (j = 0; j<4; j++) {

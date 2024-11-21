@@ -148,4 +148,4 @@ Example/GNSS-INS/GNSSINS.cpp
 
 target_link_libraries(GNSSINS RTKLIB PSINS)
 
-
+add_executable(decoder Example/Tool/decoder.cpp)

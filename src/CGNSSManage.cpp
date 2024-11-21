@@ -167,7 +167,7 @@ void CGNSSManage::TraceOpen(const char *filename)
 
 	sprintf(file, "%s%s", outdir, filename);
 	traceopen(file);	
-	tracelevel(1);
+	tracelevel(5);
 }
 
 void CGNSSManage::Sol2kml()

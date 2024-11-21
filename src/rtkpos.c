@@ -690,7 +690,7 @@ static void zdres(int base, const obsd_t *obs, int n, const double *rs,
 	}
 	trace(3, "y=\n"); tracemat(4, y, nf * 2, n, 13, 3);
 
-	return 1;
+	return;
 }
 /* time-interpolation of residuals (for post-processing) ---------------------*/
 static double intpres(gtime_t time, const obsd_t *obs, int n, const nav_t *nav,

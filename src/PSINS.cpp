@@ -4026,8 +4026,9 @@ int CVGHook::Update(CVect3 &wm, CVect3 &vm, double ts)
 //******************************  File Read or Write *********************************/
 #ifdef PSINS_IO_FILE
 #pragma message("  PSINS_IO_FILE")
-
+#ifdef _WIN32
 #include "io.h"
+#endif
 char* time2fname(void)
 {
 	static char PSINSfname[32];
