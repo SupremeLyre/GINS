@@ -116,6 +116,6 @@ int main(int argc, char *argv[])
     checkbrk("%40s", "");
     printf("Time=%.1f\n", (tickget() - tick) * 0.001);
     system("./decoder");
-    system("/home/supremelyre/cmakeprojects/RTKLIB_bin/rtkplot_qt ../results/2023013/2023-23-01-13-f2-test.pos");
+    system("/home/supremelyre/cmakeprojects/rtkexplorer/bin/rtkplot_qt ../results/2023013/2023-23-01-13-f2-test.pos");
     return 1;
 }

@@ -1,8 +1,8 @@
 {
     "cmake.debugConfig": {
         "args": [
-            // "config.yaml",
-            "ppp_kin.conf"
+            "config.yaml",
+            // "ppp_kin.conf"
         ]
     }
 }
