@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <string>
 #define PI 3.1415926535897932 /* pi */
 #define D2R (PI / 180.0)      /* deg to rad */
 #define R2D (180.0 / PI)      /* rad to deg */
@@ -17,11 +18,16 @@ typedef struct
     std::array<double, 15> Pk;
     double kftk;
 } InsResult;
-int main()
+std::string binfilename = "kfdebug-urban-f2.bin";
+int main(int argc, char **argv)
 {
-    std::fstream fin("/home/supremelyre/cmakeprojects/GINS/results/2023013/kfdebug-urban-f2.bin",
-                     std::ios::in | std::ios::binary);
-    std::fstream fout("/home/supremelyre/cmakeprojects/GINS/results/2023013/kfdebug-urban-f2.txt", std::ios::out);
+    std::string path = "./";
+    if (argc > 1)
+        path = argv[1];
+    path += binfilename;
+    std::cout << "decode psins result:\n" << path << "\n";
+    std::fstream fin(path, std::ios::in | std::ios::binary);
+    std::fstream fout(path + ".txt", std::ios::out);
     InsResult temp{};
     while (!fin.eof())
     {

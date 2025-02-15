@@ -2526,7 +2526,7 @@ int CMaxMin::Update(double f)
         flag = 1;
     }
     if (--cntpreCur <= 0)
-    { //滞后pre00的最大最小值
+    { // 滞后pre00的最大最小值
         maxpreRes = maxpreCur;
         minpreRes = minpreCur;
         maxpreCur = minpreCur = f;
@@ -3224,7 +3224,7 @@ void CSINSGNSS::SetFt(int nnq)
     sins.etm();
     Ft.SetMat3(0, 0, sins.Maa), Ft.SetMat3(0, 3, sins.Mav), Ft.SetMat3(0, 6, sins.Map), Ft.SetMat3(0, 9, -sins.Cnb);
     Ft.SetMat3(3, 0, sins.Mva), Ft.SetMat3(3, 3, sins.Mvv), Ft.SetMat3(3, 6, sins.Mvp),
-        Ft.SetMat3(3, 12, sins.Cnb); //看下效果
+        Ft.SetMat3(3, 12, sins.Cnb); // 看下效果
     NULL, Ft.SetMat3(6, 3, sins.Mpv), Ft.SetMat3(6, 6, sins.Mpp);
     Ft.SetDiagVect3(9, 9, sins._betaGyro);
     Ft.SetDiagVect3(12, 12, sins._betaAcc); // 0-14 phi,dvn,dpos,eb,db
@@ -3338,7 +3338,7 @@ int CSINSGNSS::Update(const CVect3 *pwm, const CVect3 *pvm, int nn, double ts, i
 {
     int res = TDUpdate(pwm, pvm, nn, ts, nSteps);
     sins.lever(lvGNSS);
-    avpi.Push(sins, 1); //和子样相关
+    avpi.Push(sins, 1); // 和子样相关
     return res;
 }
 
@@ -3594,7 +3594,7 @@ void CSINSGNSSDR::Init(const CSINS &sins0, int grade)
     FBTau.Set(fIII, fIII, fIII, fIII, fIII, fIII, fIII);
 }
 
-void CSINSGNSSDR::SetFt(int nnq) //系统模型需要重写
+void CSINSGNSSDR::SetFt(int nnq) // 系统模型需要重写
 {
     CSINSGNSS::SetFt(15);
     CMat3 MvkD = norm(sins.vn) * CMat3(-sins.Cnb.e02, sins.Cnb.e01, sins.Cnb.e00, -sins.Cnb.e12, sins.Cnb.e11,
@@ -3607,7 +3607,7 @@ void CSINSGNSSDR::SetFt(int nnq) //系统模型需要重写
 void CSINSGNSSDR::Feedback(int nnq, double fbts)
 {
     CSINSGNSS::Feedback(15, fbts);
-    Cbo = Cbo * a2mat(CVect3(FBXk.dd[15], 0.0, FBXk.dd[17])); //安装角
+    Cbo = Cbo * a2mat(CVect3(FBXk.dd[15], 0.0, FBXk.dd[17])); // 安装角
     Kod *= 1 - FBXk.dd[16];
     posDR -= *(CVect3 *)(&FBXk.dd[18]);
 }
@@ -4495,7 +4495,7 @@ void CSINS::lever(const CVect3 &dL, CVect3 *ppos, CVect3 *pvn)
         lvr = dL;
     //	Mpv = CMat3(0,eth.f_RMh,0, eth.f_clRNh,0,0, 0,0,1);
     Mpv.e01 = eth.f_RMh, Mpv.e10 = eth.f_clRNh, Mpv.e22 = 1.0;
-    CW = Cnb * askew(web), MpvCnb = Mpv * Cnb; //杆臂：b系下INS到GNSS
+    CW = Cnb * askew(web), MpvCnb = Mpv * Cnb; // 杆臂：b系下INS到GNSS
     if (ppos == NULL)
     {
         posL = pos + MpvCnb * lvr;
@@ -5633,7 +5633,7 @@ int CAlignkf::Update(const CVect3 *pwm, const CVect3 *pvm, int nSamples, double 
     if (norm(vnr) > 0) // 移动状态
     {
         *(CVect3 *)&Zk.dd[0] = sins.vn - vnr;
-        if (norm(sins.wnb) < 1.1 * glv.dps) //角速度比较大 就不处理
+        if (norm(sins.wnb) < 1.1 * glv.dps) // 角速度比较大 就不处理
             SetMeasFlag(0007);
     }
     qnb = sins.qnb;
@@ -6425,7 +6425,18 @@ int readimu(imuopt_t *opt, imu_t *imu)
     }
     while (fgets(buff, sizeof(buff), fp))
     {
+#if 1
         if (sscanf(buff, "%lf%lf%lf%lf%lf%lf%lf\n", &tow, &wm.i, &wm.j, &wm.k, &vm.i, &vm.j, &vm.k) < 7)
+#else
+        char type;
+        int week;
+        int leap;
+        double temprature;
+        int stamp;
+        int cap;
+        if (sscanf(buff, "%c,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%d,%d", &type, &tow, &week, &leap, &temprature,
+                   &wm.i, &wm.j, &wm.k, &vm.i, &vm.j, &vm.k, &stamp, &cap) < 13)
+#endif
             continue;
         if (tow < opt->ts || tow > opt->te)
             continue;

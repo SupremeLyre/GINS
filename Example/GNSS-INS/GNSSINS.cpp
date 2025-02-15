@@ -115,7 +115,11 @@ int main(int argc, char *argv[])
     app.Sol2kml();
     checkbrk("%40s", "");
     printf("Time=%.1f\n", (tickget() - tick) * 0.001);
-    system("./decoder");
-    system("/home/supremelyre/cmakeprojects/rtkexplorer/bin/rtkplot_qt ../results/2023013/2023-23-01-13-f2-test.pos");
+    std::string command = "./decoder ";
+    std::string path = Iyaml.imuopt.outpath;
+    command += path;
+    system(command.c_str());
+    // system("/home/supremelyre/cmakeprojects/rtkexplorer/bin/rtkplot_qt
+    // ../results/2023013/2023-23-01-13-f2-test.pos");
     return 1;
 }

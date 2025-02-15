@@ -323,8 +323,8 @@ int CMyNavFilter::Update(const CVect3 *pwm, const CVect3 *pvm, int nn, double ts
     int res = TDUpdate(pwm, pvm, nn, ts, nSteps);
     sins.lever(lvGNSS);
     avpi.Push(sins, 1);
-    // /* if(*gnsslost>5) */ ZUPTtest();
-    // ZIHRtest();
+    /* if(*gnsslost>5) */ ZUPTtest();
+    ZIHRtest();
     return res;
 }
 

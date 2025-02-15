@@ -127,6 +127,7 @@
  *           2016/09/19 1.42 modify api deg2dms() to consider numerical error
  *           2017/04/11 1.43 delete EXPORT for global variables
  *-----------------------------------------------------------------------------*/
+#include <stdio.h>
 #define _POSIX_C_SOURCE 199506
 #include <ctype.h>
 #include <stdarg.h>
@@ -5097,6 +5098,7 @@ extern int showmsg(char *format, ...)
     vfprintf(stderr, format, arg);
     va_end(arg);
     fprintf(stderr, "\r");
+    fflush(stderr);
     return 0;
 }
 extern void settspan(gtime_t ts, gtime_t te)
