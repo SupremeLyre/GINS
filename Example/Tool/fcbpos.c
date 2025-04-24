@@ -642,7 +642,7 @@ static void estfcb(const ambInf *amb, int *num, fcb_t *fcb)
         }
         if (n > 0)
         {
-            if (inifcb(&amb0, n, flag, ifcb) && lsqfcb(&amb0, n, flag, ifcb, sfcb))
+            if (inifcb(amb0, n, flag, ifcb) && lsqfcb(amb0, n, flag, ifcb, sfcb))
             {
                 for (i = 0; i < MAXSAT; i++)
                     if (flag[i])
@@ -1060,8 +1060,8 @@ int main(int argc, char *argv[])
     // outarc(&arc_wl,"arc_wl.txt");
     arc2amb(&arc_el, &amb_el);
     arc2amb(&arc_wl, &amb_wl);
-    estfcb(amb_el.data, amb_el.n, &fcb_el);
-    estfcb(amb_wl.data, amb_wl.n, &fcb_wl);
+    estfcb(amb_el.data, &amb_el.n, &fcb_el);
+    estfcb(amb_wl.data, &amb_wl.n, &fcb_wl);
 
     outarcpos(&arc_el, &fcb_el, "arc_el-pos.txt");
     outarcpos(&arc_wl, &fcb_wl, "arc_wl-pos.txt");
@@ -1088,7 +1088,7 @@ int main(int argc, char *argv[])
     {
         while ((n = inputamb(&amb_nl, ambs)) > 0)
         {
-            estfcb(ambs, n, &fcb_nl);
+            estfcb(ambs, &n, &fcb_nl);
             outambpos(ambs, n, &fcb_nl, &arc_wl, "arc_nl-pos.txt");
             outbody(fp, &fcb_nl, ts, ambs[0].ind);
         }

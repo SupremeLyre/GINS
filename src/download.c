@@ -1045,7 +1045,7 @@ extern int loadobs(gtime_t ts, gtime_t te, const char *infile, const char *outdi
     char *stas[550];
     for (int i = 0; i < 550; i++)
     {
-        stas[i] = &station[i];
+        stas[i] = station[i];
     }
     int nsta = dl_readstas(infile, stas, 550);
     strcpy(urls.path, path);

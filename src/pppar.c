@@ -469,7 +469,8 @@ static int fix_NL(rtk_t *rtk, const obsd_t *obs, const nav_t *nav, int *isat1, i
     Pp = rtk->Pa;
     a = zeros(n, 1);
     D = zeros(rtk->nx, n);
-    Qaa = E = F = ia = NULL;
+    Qaa = E = F = NULL;
+    ia = NULL;
 
     for (i = na = naa = sys = 0; i < n; i++)
     {

@@ -1383,7 +1383,7 @@ static int ppp_res(const obsd_t *obs, int n, const double *rs, const double *dts
             }
 
             /* exclude obs */
-            if (exclude((j % 2) + 1, (j / 2) + 1, sat, NULL, exc))
+            if (exclude((j % 2) + 1, (j / 2) + 1, sat, 0, exc))
                 continue;
             if (j % 2 == 1 && (rtk->ssat[sat - 1].eobs & (0x1 << (j / 2))))
                 continue;
@@ -1506,7 +1506,7 @@ static int cor_res(const obsd_t *obs, const int n, const int *refs, const nav_t 
     /* constraint to external troposphere correction */
     if (rtk->opt.posopt[4])
     {
-        if (!exclude(4, NULL, NULL, NULL, exc))
+        if (!exclude(4, 0, 0, 0, exc))
         {
             if (pppcorr_trop(obs[0].time, pos, trop, std_trop, nav))
             {
@@ -1541,7 +1541,7 @@ static int cor_res(const obsd_t *obs, const int n, const int *refs, const nav_t 
                 continue;
             if (!rtk->ssat[sat - 1].vs || azel[1] < 15 * D2R)
                 continue;
-            if (exclude(8, NULL, sat, refs[k], exc))
+            if (exclude(8, 0, sat, refs[k], exc))
                 continue;
 
             if (!pppcorr_stec(obs[i].time, pos, sat, refs[k], &iono, &std_iono, nav, 2))
