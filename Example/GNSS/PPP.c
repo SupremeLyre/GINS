@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
         freeobs(&obss);
         closefile(fp_outs, 2);
         traceclose();
-        checkbrk("Time=%.1f s\n", (tickget() - tick) * 0.001);
+        printf("\nTime=%.1f s\n", (tickget() - tick) * 0.001);
     }
     freeproduct(&navs, &pcvss, &pcvsr, &stas);
     // sol2kml(filopt.outdir);

@@ -381,18 +381,27 @@ static int estpos(const obsd_t *obs, int n, double *rs, const double *dts, const
         if (norm(dx, NX) < 1E-4)
         {
             /* 后验残差 */
-            // double max = 0.0;
-            // for (j = k = max = 0; j<n; j++) {
-            // 	if (vsat[j]) {
-            // 		if (fabs(resp[k]) > max) {
-            // 			max = resp[k];
-            // 			ind = j;
-            // 		}
-            // 		k++;
-            // 	}
-            // }
-            // for (j = d = 0; j<n; j++) if (exc[j]) d++;
-            // if ((k - d) > 7 && max > 20) {exc[ind] = 1; continue; }			// new add by zh in 23-08-27
+            double max = 0.0;
+            for (j = k = max = 0; j < n; j++)
+            {
+                if (vsat[j])
+                {
+                    if (fabs(resp[k]) > max)
+                    {
+                        max = resp[k];
+                        ind = j;
+                    }
+                    k++;
+                }
+            }
+            for (j = d = 0; j < n; j++)
+                if (exc[j])
+                    d++;
+            if ((k - d) > 7 && max > 20)
+            {
+                exc[ind] = 1;
+                continue;
+            } // new add by zh in 23-08-27
 
             sol->type = 0;
             sol->time = timeadd(obs[0].time, -x[3] / CLIGHT);
@@ -479,7 +488,7 @@ static int resdop(const obsd_t *obs, int n, const double *rs, const double *dts,
 
         /* range rate residual (m/s) */
         // um980 doppler*-1
-        v[nv] = (-obs[i].D[0] * CLIGHT / freq - (rate + x[3] - CLIGHT * dts[1 + i * 2])) / sig;
+        v[nv] = (obs[i].D[0] * CLIGHT / freq - (rate + x[3] - CLIGHT * dts[1 + i * 2])) / sig;
 
         /* design matrix */
         for (j = 0; j < 4; j++)

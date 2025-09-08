@@ -498,7 +498,7 @@ void CMyAutoDrive::IMUProcess(imud_t *pimu)
         vm[i] = pimu[i].vm;
         if (tk != 0.0 && (pimu[i].t - tk) > 0.011)
         {
-            trace(1, "%10.4f----%10.4f\n", pimu[i].t, tk);
+            // trace(1, "%10.4f----%10.4f\n", pimu[i].t, tk);
         }
         tk = pimu[i].t;
     }

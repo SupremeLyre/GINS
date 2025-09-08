@@ -6342,7 +6342,7 @@ CMat3 randn(const CMat3 &mu, const CMat3 &sigma = One33)
 
 /* read imu data --------------------------------------------------------------*/
 #define NINCIMU 262144
-static int addimudata(imu_t *imu, const imud_t *data)
+static int addimudata(imu_t *imu, imud_t *data, const imuopt_t *opt)
 {
     imud_t *imu_data;
 
@@ -6354,7 +6354,7 @@ static int addimudata(imu_t *imu, const imud_t *data)
             imu->nmax += 30000;
         if (!(imu_data = (imud_t *)realloc(imu->data, sizeof(imud_t) * imu->nmax)))
         {
-            printf("addobsdata: memalloc error n=%dx%d\n", sizeof(imud_t), imu->nmax);
+            printf("addobsdata: memalloc error n=%lux%d\n", sizeof(imud_t), imu->nmax);
             free(imu->data);
             imu->data = NULL;
             imu->n = imu->nmax = 0;
@@ -6362,6 +6362,58 @@ static int addimudata(imu_t *imu, const imud_t *data)
         }
         imu->data = imu_data;
     }
+    double wfact = 1.0, vfact = 1.0;
+    switch (opt->gyr_type)
+    {
+    case 1:
+        wfact *= imu->n <= 1 ? (1.0 / opt->freq) : data->t - imu->data[imu->n - 1].t;
+        printf("wfact=%lf\n", wfact);
+        break;
+    case 2:
+        wfact *= 1.0;
+        break;
+    default:
+        // return 0;
+        break;
+    }
+    switch (opt->acc_type)
+    {
+    case 1:
+        vfact *= imu->n <= 1 ? (1.0 / opt->freq) : data->t - imu->data[imu->n - 1].t;
+        break;
+    case 2:
+        vfact *= 1.0;
+        break;
+    default:
+        // return 0;
+        break;
+    }
+    switch (opt->gyr_unit)
+    {
+    case 1:
+        wfact *= (PI / 180.0);
+        break;
+    case 2:
+        wfact *= 1.0;
+        break;
+    default:
+        // return 0;
+        break;
+    }
+    switch (opt->acc_unit)
+    {
+    case 1:
+        vfact *= 1.0;
+        break;
+    case 2:
+        vfact *= glv.g0;
+        break;
+    default:
+        // return 0;
+        break;
+    }
+    data->vm = data->vm * vfact;
+    data->wm = data->wm * wfact;
     imu->data[imu->n++] = *data;
     return 1;
 }
@@ -6373,51 +6425,6 @@ int readimu(imuopt_t *opt, imu_t *imu)
     char buff[256];
     double tow, wfact = 1.0, vfact = 1.0;
 
-    switch (opt->gyr_type)
-    {
-    case 1:
-        wfact *= 1.0 / opt->freq;
-        break;
-    case 2:
-        wfact *= 1.0;
-        break;
-    default:
-        return 0;
-    }
-    switch (opt->acc_type)
-    {
-    case 1:
-        vfact *= 1.0 / opt->freq;
-        break;
-    case 2:
-        vfact *= 1.0;
-        break;
-    default:
-        return 0;
-    }
-    switch (opt->gyr_unit)
-    {
-    case 1:
-        wfact *= (PI / 180.0);
-        break;
-    case 2:
-        wfact *= 1.0;
-        break;
-    default:
-        return 0;
-    }
-    switch (opt->acc_unit)
-    {
-    case 1:
-        vfact *= 1.0;
-        break;
-    case 2:
-        vfact *= glv.g0;
-        break;
-    default:
-        return 0;
-    }
-
     if (!(fp = fopen(opt->imufile, "r")))
     {
         printf("imu file open error %s\n", opt->imufile);
@@ -6425,7 +6432,7 @@ int readimu(imuopt_t *opt, imu_t *imu)
     }
     while (fgets(buff, sizeof(buff), fp))
     {
-#if 1
+#if 0
         if (sscanf(buff, "%lf%lf%lf%lf%lf%lf%lf\n", &tow, &wm.i, &wm.j, &wm.k, &vm.i, &vm.j, &vm.k) < 7)
 #else
         char type;
@@ -6435,7 +6442,7 @@ int readimu(imuopt_t *opt, imu_t *imu)
         int stamp;
         int cap;
         if (sscanf(buff, "%c,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%d,%d", &type, &tow, &week, &leap, &temprature,
-                   &wm.i, &wm.j, &wm.k, &vm.i, &vm.j, &vm.k, &stamp, &cap) < 13)
+                   &vm.i, &vm.j, &vm.k, &wm.i, &wm.j, &wm.k, &stamp, &cap) < 13)
 #endif
             continue;
         if (tow < opt->ts || tow > opt->te)
@@ -6444,7 +6451,7 @@ int readimu(imuopt_t *opt, imu_t *imu)
         imud.wm = wm * wfact;
         imud.vm = vm * vfact;
         IMURFU(&imud.wm, &imud.vm, 1, opt->rfu);
-        if (addimudata(imu, &imud) < 0)
+        if (addimudata(imu, &imud, opt) < 0)
             break;
     }
     fclose(fp);
